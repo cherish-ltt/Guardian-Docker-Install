@@ -1,0 +1,77 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: guardian-postgres
+    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-guardian_auth}
+      POSTGRES_USER: ${POSTGRES_USER:-guardian_auth}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-123456}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./pgsql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - guardian-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U myapp_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  nextjs:
+    build: ./nextjs
+    image: ghyper9023/guardian-nextjs:v0.1
+    container_name: guardian-nextjs
+    restart: always
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://${POSTGRES_USER:-guardian_auth}:${POSTGRES_PASSWORD:-123456}@postgres:5432/${POSTGRES_DB:-guardian_auth}
+      NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-http://localhost:6123/guardian-auth/v1}
+    ports:
+      - "6124:3000"
+    networks:
+      - guardian-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  axum:
+    build: ./axum
+    image: ghyper9023/guardian-axum:v0.1
+    container_name: guardian-axum
+    restart: always
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-guardian_auth}:${POSTGRES_PASSWORD:-123456}@postgres:5432/${POSTGRES_DB:-guardian_auth}
+    ports:
+      - "6123:6123"
+    networks:
+      - guardian-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # python-cron:
+  #   build: ./py-task
+  #   image: guardian-python:v0.1
+  #   container_name: guardian-python
+  #   restart: always
+  #   environment:
+  #     DATABASE_URL: postgresql://${POSTGRES_USER:-myapp_user}:${POSTGRES_PASSWORD:-password123}@postgres:5432/${POSTGRES_DB:-myapp}
+  #   volumes:
+  #     - ./py-task:/app
+  #   networks:
+  #     - guardian-network
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+
+networks:
+  guardian-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
