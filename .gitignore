@@ -1,3 +1,5 @@
 /axum
 /nextjs
 /py-task
+.DS_Store
+/test-remote
