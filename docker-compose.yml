@@ -24,7 +24,7 @@ services:
 
   nextjs:
     build: ./nextjs
-    image: ghyper9023/guardian-nextjs:latest
+    image: ghyper9023/guardian-nextjs:v0.1
     container_name: guardian-nextjs
     restart: always
     environment:
@@ -41,7 +41,7 @@ services:
 
   axum:
     build: ./axum
-    image: ghyper9023/guardian-axum:latest
+    image: ghyper9023/guardian-axum:v0.1
     container_name: guardian-axum
     restart: always
     environment:
