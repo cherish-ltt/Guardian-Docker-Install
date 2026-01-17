@@ -24,13 +24,13 @@ services:
 
   nextjs:
     build: ./nextjs
-    image: ghyper9023/guardian-nextjs:latest
+    # image: ghyper9023/guardian-nextjs:latest
     container_name: guardian-nextjs
     restart: always
     environment:
       NODE_ENV: production
       DATABASE_URL: postgresql://${POSTGRES_USER:-guardian_auth}:${POSTGRES_PASSWORD:-123456}@postgres:5432/${POSTGRES_DB:-guardian_auth}
-      NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-http://localhost:6123/guardian-auth/v1}
+      NEXTJS_API_BASE_URL: ${NEXTJS_API_BASE_URL:-http://localhost:6123/guardian-auth/v1}
     ports:
       - "6124:3000"
     networks:
