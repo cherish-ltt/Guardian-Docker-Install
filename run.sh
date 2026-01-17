@@ -25,9 +25,9 @@ echo "正在启动服务..."
 docker-compose up
 
 echo "服务启动完成！"
-echo "前端: http://localhost:6124"
-echo "API: http://localhost:6123"
-echo "数据库: localhost:5432"
+echo "前端: http://localhost:7001"
+echo "API: http://localhost:7002"
+echo "数据库: localhost:7000"
 echo ""
 echo "查看日志: docker-compose logs -f"
 echo "停止服务: ./stop.sh"
