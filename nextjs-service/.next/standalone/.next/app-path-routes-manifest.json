@@ -1,0 +1,12 @@
+{
+  "/2fa/page": "/2fa",
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/admins/page": "/admins",
+  "/dashboard/page": "/dashboard",
+  "/favicon.ico/route": "/favicon.ico",
+  "/login/page": "/login",
+  "/page": "/",
+  "/permissions/page": "/permissions",
+  "/roles/page": "/roles"
+}
